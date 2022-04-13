@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Контакты{% endblock %}
+{% block content %}
+    <div class="container-sm shadow-sm my-xl-5 p-5">
+        <p><h5>Адрес:</h5> г. Иваново, ул. Шевченко, д. 2.</p>
+        <p><h5>Телефон:</h5> +7 930 341 84 61</p>
+        <p><h5>Email:</h5> Marya.ivanova.17@inbox.ru</p>
+    <h5>Соц. сети:
+        <a href="https://vk.com/roza5080"><img src="{% static 'contact/vc.png' %}"/></a>
+        <a href="https://www.instagram.com/cvetochnidomik/"><img src="{% static 'contact/insta.png' %}"/></a>
+    </h5>
+
+
+    </div>
+
+{% endblock %}

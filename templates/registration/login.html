@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+    <form method="post">
+    {% csrf_token %}
+{{ form|crispy }}
+<div class="d-grid gap-2">
+   <input class="btn-primary btn" type="submit" value="Войти" />
+<input type="hidden" name="next" value="{{ next }}" />
+       {% if form.errors %}
+    <a class="btn btn-outline-danger" href="{% url 'password_reset' %}">Восстановить пароль</a>
+{% endif %}
+</div>
+
+    </form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Оформление заказа</h1>
+    <div class="order-info">
+        <h3>Ваш заказ</h3>
+        <ul>
+            {% for item in cart %}
+                <li>
+                    {{ item.quantity }}x {{ item.product.name }}
+                    <span>${{ item.total_price }}</span>
+                </li>
+            {% endfor %}
+        {% if cart.coupon %}
+        <li>
+            "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}%)
+            <span>- ${{ cart.get_discount|floatformat:"2" }}</span>
+        </li>
+    {% endif %}
+        </ul>
+        <p>Итог: {{ cart.get_total_price_after_discount|floatformat:"2" }}</p>
+    </div>
+    <form action="." method="post" class="order-form">
+        {{ form|crispy }}
+        <div class="d-grid gap-2">
+
+        <input class="btn btn-outline-success" type="submit" value="Оформить">
+        </div>
+        {% csrf_token %}
+    </form>
+{% endblock %}

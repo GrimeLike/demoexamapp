@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+    Your shopping cart
+{% endblock %}
+{% block content %}
+    <h2>Your shopping cart</h2>
+    <div>
+
+    </div>
+    <table class="table table-hover align-text-top">
+        <thead>
+        <tr class="fs-5">
+            <th scope="col">#</th>
+            <th scope="col">Фото</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Общая цена</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        {% for item in cart %}
+            {% with product=item.product %}
+                <tbody>
+                <tr class="fs-5">
+                    <th scope="row">{{ product.id }}</th>
+                    <td><a href="{{ product.get_absolute_url }}">
+                        <img style="width: 20%" src="{{ product.image.url }} ">
+                    </a></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.total_price }}</td>
+                    <td><a class="btn btn-danger" href="{% url "main:cart_remove" product.id %}">Удалить</a></td>
+
+                </tr>
+            {% endwith %}
+        {% endfor %}
+        {% if cart.coupon %}
+            <tr class="fs-4">
+                <td>Изменения</td>
+                <td colspan="4"></td>
+                <td>{{ cart.get_total_price }}</td>
+            </tr>
+            <tr>
+            <td class="fs-4" colspan="4"></td>
+
+                <td>
+                    Купон {{ cart.coupon.discount }}% применён
+                </td>
+
+
+                <td>
+                    - {{ cart.get_discount|floatformat:"2" }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr class='fs-4'>
+            <td>Итог:</td>
+            <td colspan="4"></td>
+            <td>
+                {{ cart.get_total_price_after_discount|floatformat:"2" }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form action="{% url "main:apply" %}" method="post">
+    {{ coupon_apply_form|crispy }}
+    <input class="btn btn-outline-success mb-3" type="submit" value="Применить">
+    {% csrf_token %}
+</form>
+    <div class="d-grid gap-2">
+        <a href="{% url "main:order_create" %}" class="btn btn-success">Оформить заказ</a>
+        <a href="{% url "main:product_list" %}" class="btn btn-primary">Продолжить покупки</a>
+
+    </div>
+{% endblock %}
